@@ -5,7 +5,7 @@ RUN  set -ex; \
      \
      curl -o /usr/local/bin/su-exec.c https://raw.githubusercontent.com/ncopa/su-exec/master/su-exec.c; \
      \
-     fetch_deps='gcc libc-dev'; \
+     fetch_deps='gcc libc-dev iputils-ping'; \
      apt-get update; \
      apt-get install -y --no-install-recommends $fetch_deps; \
      rm -rf /var/lib/apt/lists/*; \
@@ -16,4 +16,6 @@ RUN  set -ex; \
      rm /usr/local/bin/su-exec.c; \
      \
      apt-get purge -y --auto-remove $fetch_deps
+
+ENV PUID=0 PGID=0 UMASK=022 TZ=Asia/Shanghai
 
