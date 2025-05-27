@@ -5,8 +5,9 @@ RUN  set -ex; \
      \
      curl -o /usr/local/bin/su-exec.c https://raw.githubusercontent.com/ncopa/su-exec/master/su-exec.c; \
      \
-     fetch_deps='gcc libc-dev iputils-ping'; \
+     fetch_deps='gcc libc-dev'; \
      apt-get update; \
+     apt-get install -y iputils-ping; \
      apt-get install -y --no-install-recommends $fetch_deps; \
      rm -rf /var/lib/apt/lists/*; \
      gcc -Wall \
