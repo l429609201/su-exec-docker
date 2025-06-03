@@ -1,4 +1,4 @@
-FROM ibm-semeru-runtimes:open-17-jre
+FROM ibm-semeru-runtimes:open-21-jre
 
 # Install latest su-exec
 RUN  set -ex; \
