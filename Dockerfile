@@ -1,4 +1,4 @@
-FROM ibm-semeru-runtimes:open-21-jre
+FROM python:3.11-slim
 
 # Install latest su-exec
 RUN  set -ex; \
