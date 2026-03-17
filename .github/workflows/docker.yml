@@ -1,26 +1,51 @@
-name: docker
+name: Build su-exec base image
 
-on:
+于:
+  push:
+    tags:
+      - '*'
   workflow_dispatch:
+    inputs:
+      python_version:
+        description: 'Python 版本 (例如: 3.11, 3.12, 3.13)'
+        required: true
+        default: '3.12'
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: 解析 Python 版本
+        id: vars
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            VERSION="${GITHUB_REF_NAME}"
+          else
+            VERSION="${{ github.event.inputs.python_version }}"
+          fi
+          echo "python_version=${VERSION}" >> $GITHUB_OUTPUT
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push Docker image
+
+      - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: ./
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: l429609201/su-exec:latest, l429609201/su-exec:su-exec
+          build-args: |
+            PYTHON_VERSION=${{ steps.vars.outputs.python_version }}
+          tags: l429609201/su-exec:${{ steps.vars.outputs.python_version }}
