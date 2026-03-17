@@ -1,6 +1,6 @@
 name: Build su-exec base image
 
-于:
+on:
   push:
     tags:
       - '*'
