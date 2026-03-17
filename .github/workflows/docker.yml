@@ -21,11 +21,12 @@ jobs:
         id: vars
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
-            VERSION="${GITHUB_REF_NAME}"
+            VERSION="${GITHUB_REF_NAME#v}"
           else
             VERSION="${{ github.event.inputs.python_version }}"
           fi
           echo "python_version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "构建 Python ${VERSION} 基底镜像"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
